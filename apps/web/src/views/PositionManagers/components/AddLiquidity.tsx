@@ -125,6 +125,7 @@ export const AddLiquidity = memo(function AddLiquidity({
   } = useTranslation()
   const { account, chain } = useWeb3React()
   const tokenPairName = useMemo(() => `${currencyA.symbol}-${currencyB.symbol}`, [currencyA, currencyB])
+  const slippage = '0x00000000000000000000000000000000000000000000000000b1a2bc2ec50000' // 5%
 
   const onInputChange = useCallback(
     ({
@@ -282,7 +283,7 @@ export const AddLiquidity = memo(function AddLiquidity({
               [
                 allowDepositToken0 ? amountA?.numerator ?? 0n : 0n,
                 allowDepositToken1 ? amountB?.numerator ?? 0n : 0n,
-                '0x',
+                manager.name === 'Teahouse Finance' ? slippage : '0x', // hardcode slippage for teahouse temporary
               ],
               {
                 account: account ?? '0x',
@@ -314,6 +315,7 @@ export const AddLiquidity = memo(function AddLiquidity({
     toastSuccess,
     t,
     onDone,
+    manager.name,
   ])
 
   const translationData = useMemo(
